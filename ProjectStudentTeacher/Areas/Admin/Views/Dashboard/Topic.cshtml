@@ -1,0 +1,170 @@
+﻿
+@{
+    ViewBag.Title = "Topic";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script>
+    $(document).ready(function () {
+        GetAllTopics();
+        $("#submitbtn").show();
+        $("#updatebtn").hide();
+        $("#submitbtn").click(function () {
+            SubmitData();
+        })
+        $("#updatebtn").click(function () {
+            UpdateData();
+        })
+    })
+
+    function GetAllTopics()
+    {
+        $.ajax({
+            url: 'https://localhost:44311/api/Admin/getalltopic',
+            method: 'GET',
+            contentType: 'application/json',
+            success: function (resp) {
+                var i = 1;
+                resp.forEach(function (item) {
+                    $("#TopicData").append("<tr><td>" + (i++) + "</td><td>" + item.topic_name + "</td><td><button onclick='Edit(" + item.topic_id + ", \"" + item.topic_name + "\")' class='btn btn-success'>Edit</button><button onclick='Delete(" + item.topic_id + ")' class='btn btn-danger'>Delete</button></td></tr>");
+                });
+            }
+                     
+        })
+    }
+
+    function Edit(id,topicname)
+    {
+        $("#submitbtn").hide();
+        $("#updatebtn").show();
+        $("#topicname").val(topicname);
+        $("#topicid").val(id);
+    }
+
+    function Delete(id)
+    {
+        $.ajax({
+            url: 'https://localhost:44311/api/Admin/deletetopic/'+id,
+            method: 'DELETE',
+            contentType: 'application/json',
+            success: function (resp) {
+                $("#TopicData").empty();
+                GetAllTopics();
+                console.log(resp);
+            }
+        })
+    }
+    function SubmitData()
+    {
+      
+        var topic_name = $("#topicname").val();
+        var topic_id = $("#topicid").val();
+        var jsonData = { "topic_id": topic_id, "topic_name": topic_name };
+        $.ajax({
+            url: 'https://localhost:44311/api/Admin/addtopic',
+            method: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(jsonData),
+            success: function (resp) {
+                console.log(resp);
+                $("#TopicData").empty();
+                GetAllTopics();
+                $("#topicname").val("");
+            }
+
+        })
+
+    }
+    function UpdateData()
+    {
+        var topic_name=$("#topicname").val();
+        var topic_id = $("#topicid").val();
+        var jsonData= { "topic_id": topic_id, "topic_name":topic_name };
+        $.ajax({
+            url: 'https://localhost:44311/api/Admin/updatetopic',
+            method: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(jsonData),
+            success: function (resp) {
+                console.log(resp);
+                $("#TopicData").empty();
+                GetAllTopics();
+                $("#submitbtn").show();
+                $("#updatebtn").hide();
+                $("#topicname").val("");
+            }
+
+        })
+
+        
+    }
+</script>
+
+
+
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header bg-primary">
+                <div class="row">
+                    <div class="col-6 text-right">
+                        Add Topic
+                    </div>
+                    <div class="col-6 text-right">
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                   <tr>
+                       <td>Topic Name</td>
+                       <td> <input type="text" id="topicname" name="topicname" class="form-control"/>
+                       <input type="text" id="topicid" name="topicname" class="form-control"  hidden/> </td>
+                   </tr>
+                   <tr>
+                       <td> <button id="submitbtn" class="btn btn-primary">Submit</button>
+                       <button id="updatebtn" class="btn btn-primary">Update</button></td>
+                   </tr>
+                    
+                    
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header bg-primary">
+                <div class="row">
+                    <div class="col-6 text-right">
+                        All Topics
+                    </div>
+                    <div class="col-6 text-right">
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+               <table class="table table-bordered">
+                   <thead>
+                       <tr>
+                           <th>Sr No</th>
+                           <th>Content Name</th>
+                           <th>Action</th>
+                       </tr>
+                   </thead>
+
+                   <tbody id="TopicData">
+                       
+                   </tbody>
+
+               </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+

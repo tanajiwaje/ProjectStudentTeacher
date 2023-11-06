@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d46248fa09de485f81042d0339171440" Name="Diagram1">
+        <EntityTypeShape EntityType="StudentTeacherDBModel.tblstudent_details" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StudentTeacherDBModel.tblstudent_payments" Width="1.5" PointX="5.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="StudentTeacherDBModel.tblstudent_registrations" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="StudentTeacherDBModel.tbltopic_contents" Width="1.5" PointX="8" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="StudentTeacherDBModel.tbltraining_course_fees" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="StudentTeacherDBModel.tbltraining_courses" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="StudentTeacherDBModel.tbltraining_topics" Width="1.5" PointX="5.75" PointY="9.25" IsExpanded="true" />
+        <AssociationConnector Association="StudentTeacherDBModel.fkstidsd" ManuallyRouted="false" />
+        <AssociationConnector Association="StudentTeacherDBModel.fkregid" ManuallyRouted="false" />
+        <AssociationConnector Association="StudentTeacherDBModel.fkcoursesdid" ManuallyRouted="false" />
+        <AssociationConnector Association="StudentTeacherDBModel.fktopicid" ManuallyRouted="false" />
+        <AssociationConnector Association="StudentTeacherDBModel.fkcourseid" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

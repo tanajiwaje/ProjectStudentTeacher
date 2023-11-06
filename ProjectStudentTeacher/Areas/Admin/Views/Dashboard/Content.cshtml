@@ -1,0 +1,210 @@
+﻿
+@{
+    ViewBag.Title = "Content";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<script>
+    $(document).ready(function () {
+        GetAllContent();
+        GetAllTopics();
+        $("#updatebtn").hide();
+        $("#submitbtn").click(function () {
+            submitData();
+        })
+
+        $("#updatebtn").click(function () {
+            UpdateData();
+        })
+        
+
+    })
+
+    function submitData()
+    {
+        var topic_id = $("#ddtopic").val();
+        var contentname = $("#contentname").val();
+
+        var jsondata = { topic_id: topic_id, content_name: contentname }
+        $.ajax({
+            url: 'https://localhost:44311/api/Admin/addcontent',
+            method: 'Post',
+            contentType: 'application/json',
+            data: JSON.stringify(jsondata),
+            success: function (resp) {
+                console.log(resp);
+                $("#ContentData").empty();
+                GetAllContent();
+                $("#ddtopic").val("");
+                $("#contentname").val("");
+
+            }
+        })
+
+    }
+    
+    function GetAllTopics() {
+        $.ajax({
+            url: 'https://localhost:44311/api/Admin/getalltopic',
+            method: 'GET',
+            contentType: 'application/json',
+            success: function (resp) {
+                console.log(resp);
+                resp.forEach(function (item) {
+                    $("#ddtopic").append("<option value="+item.topic_id+">"+item.topic_name+"</option>")
+                });
+            }
+
+        })
+    }
+    function GetAllContent()
+    {
+        $.ajax({
+            url: 'https://localhost:44311/api/Admin/getallcontent',
+            method: 'get',
+            contentType: 'application/json',
+            success: function (resp) {
+                console.log(resp);
+                var i = 1;
+                resp.forEach(function (item) {
+                    $("#ContentData").append("<tr><td>" + (i++) + "</td><td>" + item.topic_name + "</td><td>" + item.content_name + "</td><td><button class='btn btn-success' onclick='Edit(" + item.content_id + ", \"" + item.content_name + "\")'>Edit</button><button class='btn btn-danger'  onclick='Delete(" + item.content_id +")'>Delete</button></td></tr>")
+                })
+            }
+        })
+
+      
+    }
+
+    function Edit(id, name)
+    {
+
+        $("#ddtopic").hide();
+        $("#contentid").val(id);
+        $("#contentname").val(name);
+        $("#updatebtn").show();
+        $("#submitbtn").hide();
+    }
+
+    function UpdateData()
+    {
+        var content_id=$("#contentid").val();
+        var content_name = $("#contentname").val();
+
+        var jsondata = { content_id: content_id, content_name: content_name };
+        $.ajax({
+            url: 'https://localhost:44311/api/Admin/updatecontent',
+            method: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(jsondata),
+            success: function (resp) {
+                console.log(resp);
+                $("#ContentData").empty();
+                GetAllContent();
+                $("#ddtopic").val("");
+                $("#contentname").val("");
+                $("#updatebtn").hide();
+                $("#submitbtn").show();
+            }
+
+        })
+
+    }
+
+
+
+    function Delete(id)
+    {
+       
+        $.ajax({
+            url: 'https://localhost:44311/api/Admin/deletecontent/' + id,
+            method: 'DELETE',
+            contentType: 'application/json',
+            success: function (resp) {
+                $("#ContentData").empty();
+                GetAllContent();
+                console.log(resp);
+            }
+        })
+    }
+</script>
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header bg-primary">
+                <div class="row">
+                    <div class="col-6 text-right">
+                        Add Content
+                    </div>
+                    <div class="col-6 text-right">
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table">
+
+                    <tr>
+                        <td>Select Topic</td>
+                        <td> 
+                            <select id="ddtopic" class="dropdown form-control" >
+                               <option>Select</option>
+                               
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Content Name</td>
+                        <td>
+                            <input type="text" id="contentname" name="contentcname" class="form-control" />
+                            <input type="text" id="contentid" name="contentid" class="form-control" hidden />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button id="submitbtn" class="btn btn-primary">Submit</button>
+                            <button id="updatebtn" class="btn btn-primary">Update</button>
+                        </td>
+                    </tr>
+
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header bg-primary">
+                <div class="row">
+                    <div class="col-6 text-right">
+                        All Content
+                    </div>
+                    <div class="col-6 text-right">
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Sr No</th>
+                            <th>Topic Name</th>
+                            <th>Content Name</th>
+                            <th>Action</th>
+                            
+                        </tr>
+                    </thead>
+
+                    <tbody id="ContentData">
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

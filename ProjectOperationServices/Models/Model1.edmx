@@ -1,0 +1,761 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="StudentTeacherDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblstudent_details">
+          <Key>
+            <PropertyRef Name="student_id" />
+          </Key>
+          <Property Name="student_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="student_name" Type="varchar" MaxLength="100" />
+          <Property Name="gender" Type="varchar" MaxLength="10" />
+          <Property Name="mobile_number" Type="varchar" MaxLength="20" />
+          <Property Name="email_address" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="100" />
+          <Property Name="birth_date" Type="date" />
+          <Property Name="profile_photo" Type="varchar" MaxLength="40" />
+          <Property Name="qualification" Type="varchar" MaxLength="100" />
+          <Property Name="flage" Type="int" />
+        </EntityType>
+        <EntityType Name="tblstudent_payments">
+          <Key>
+            <PropertyRef Name="payment_id" />
+          </Key>
+          <Property Name="payment_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="registration_id" Type="int" />
+          <Property Name="payment_date" Type="date" />
+          <Property Name="payment_amount" Type="float" />
+          <Property Name="payment_mode" Type="varchar" MaxLength="100" />
+          <Property Name="payment_description" Type="varchar(max)" />
+          <Property Name="flage" Type="int" />
+        </EntityType>
+        <EntityType Name="tblstudent_registrations">
+          <Key>
+            <PropertyRef Name="registration_id" />
+          </Key>
+          <Property Name="registration_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="student_id" Type="int" />
+          <Property Name="course_id" Type="int" />
+          <Property Name="registration_date" Type="date" />
+          <Property Name="discount" Type="float" />
+          <Property Name="flage" Type="int" />
+        </EntityType>
+        <EntityType Name="tbltopic_contents">
+          <Key>
+            <PropertyRef Name="content_id" />
+          </Key>
+          <Property Name="content_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="topic_id" Type="int" />
+          <Property Name="content_name" Type="varchar" MaxLength="100" />
+          <Property Name="flage" Type="int" />
+        </EntityType>
+        <EntityType Name="tbltraining_course_fees">
+          <Key>
+            <PropertyRef Name="fee_id" />
+          </Key>
+          <Property Name="fee_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="course_id" Type="int" />
+          <Property Name="fees_amount" Type="float" Nullable="false" />
+          <Property Name="gst" Type="float" />
+          <Property Name="fee_mode" Type="varchar" MaxLength="20" />
+          <Property Name="flage" Type="int" />
+        </EntityType>
+        <EntityType Name="tbltraining_courses">
+          <Key>
+            <PropertyRef Name="course_id" />
+          </Key>
+          <Property Name="course_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="course_name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="flage" Type="int" />
+        </EntityType>
+        <EntityType Name="tbltraining_topics">
+          <Key>
+            <PropertyRef Name="topic_id" />
+          </Key>
+          <Property Name="topic_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="topic_name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="flage" Type="int" />
+        </EntityType>
+        <Association Name="fkcourseid">
+          <End Role="tbltraining_courses" Type="Self.tbltraining_courses" Multiplicity="0..1" />
+          <End Role="tbltraining_course_fees" Type="Self.tbltraining_course_fees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbltraining_courses">
+              <PropertyRef Name="course_id" />
+            </Principal>
+            <Dependent Role="tbltraining_course_fees">
+              <PropertyRef Name="course_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkcoursesdid">
+          <End Role="tbltraining_courses" Type="Self.tbltraining_courses" Multiplicity="0..1" />
+          <End Role="tblstudent_registrations" Type="Self.tblstudent_registrations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbltraining_courses">
+              <PropertyRef Name="course_id" />
+            </Principal>
+            <Dependent Role="tblstudent_registrations">
+              <PropertyRef Name="course_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkregid">
+          <End Role="tblstudent_registrations" Type="Self.tblstudent_registrations" Multiplicity="0..1" />
+          <End Role="tblstudent_payments" Type="Self.tblstudent_payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblstudent_registrations">
+              <PropertyRef Name="registration_id" />
+            </Principal>
+            <Dependent Role="tblstudent_payments">
+              <PropertyRef Name="registration_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkstidsd">
+          <End Role="tblstudent_details" Type="Self.tblstudent_details" Multiplicity="0..1" />
+          <End Role="tblstudent_registrations" Type="Self.tblstudent_registrations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblstudent_details">
+              <PropertyRef Name="student_id" />
+            </Principal>
+            <Dependent Role="tblstudent_registrations">
+              <PropertyRef Name="student_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fktopicid">
+          <End Role="tbltraining_topics" Type="Self.tbltraining_topics" Multiplicity="0..1" />
+          <End Role="tbltopic_contents" Type="Self.tbltopic_contents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbltraining_topics">
+              <PropertyRef Name="topic_id" />
+            </Principal>
+            <Dependent Role="tbltopic_contents">
+              <PropertyRef Name="topic_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_fetch_tblstudent_details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="student_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_fetch_tblstudent_payments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="payment_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_fetch_tblstudent_registrations" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="registration_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_fetch_tbltopic_contents" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="content_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_fetch_tbltraining_course_fees" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fee_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_fetch_tbltraining_courses" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="course_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_fetch_tbltraining_topics" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="topic_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblstudent_details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="student_id" Type="int" Mode="In" />
+          <Parameter Name="student_name" Type="varchar" Mode="In" />
+          <Parameter Name="gender" Type="varchar" Mode="In" />
+          <Parameter Name="mobile_number" Type="varchar" Mode="In" />
+          <Parameter Name="email_address" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+          <Parameter Name="birth_date" Type="date" Mode="In" />
+          <Parameter Name="profile_photo" Type="varchar" Mode="In" />
+          <Parameter Name="qualification" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_tblstudent_payments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="payment_id" Type="int" Mode="In" />
+          <Parameter Name="registration_id" Type="int" Mode="In" />
+          <Parameter Name="payment_date" Type="date" Mode="In" />
+          <Parameter Name="payment_amount" Type="float" Mode="In" />
+          <Parameter Name="payment_mode" Type="varchar" Mode="In" />
+          <Parameter Name="payment_description" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_tblstudent_registrations" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="registration_id" Type="int" Mode="In" />
+          <Parameter Name="student_id" Type="int" Mode="In" />
+          <Parameter Name="course_id" Type="int" Mode="In" />
+          <Parameter Name="registration_date" Type="date" Mode="In" />
+          <Parameter Name="discount" Type="float" Mode="In" />
+        </Function>
+        <Function Name="sp_tbltopic_contents" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="content_id" Type="int" Mode="In" />
+          <Parameter Name="topic_id" Type="int" Mode="In" />
+          <Parameter Name="content_name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_tbltraining_course_fees" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="fee_id" Type="int" Mode="In" />
+          <Parameter Name="course_id" Type="int" Mode="In" />
+          <Parameter Name="fees_amount" Type="float" Mode="In" />
+          <Parameter Name="gst" Type="float" Mode="In" />
+          <Parameter Name="fee_mode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_tbltraining_courses" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="course_id" Type="int" Mode="In" />
+          <Parameter Name="course_name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_tbltraining_topics" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="topic_id" Type="int" Mode="In" />
+          <Parameter Name="topic_name" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="StudentTeacherDBModelStoreContainer">
+          <EntitySet Name="tblstudent_details" EntityType="Self.tblstudent_details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblstudent_payments" EntityType="Self.tblstudent_payments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblstudent_registrations" EntityType="Self.tblstudent_registrations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbltopic_contents" EntityType="Self.tbltopic_contents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbltraining_course_fees" EntityType="Self.tbltraining_course_fees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbltraining_courses" EntityType="Self.tbltraining_courses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbltraining_topics" EntityType="Self.tbltraining_topics" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fkcourseid" Association="Self.fkcourseid">
+            <End Role="tbltraining_courses" EntitySet="tbltraining_courses" />
+            <End Role="tbltraining_course_fees" EntitySet="tbltraining_course_fees" />
+          </AssociationSet>
+          <AssociationSet Name="fkcoursesdid" Association="Self.fkcoursesdid">
+            <End Role="tbltraining_courses" EntitySet="tbltraining_courses" />
+            <End Role="tblstudent_registrations" EntitySet="tblstudent_registrations" />
+          </AssociationSet>
+          <AssociationSet Name="fkregid" Association="Self.fkregid">
+            <End Role="tblstudent_registrations" EntitySet="tblstudent_registrations" />
+            <End Role="tblstudent_payments" EntitySet="tblstudent_payments" />
+          </AssociationSet>
+          <AssociationSet Name="fkstidsd" Association="Self.fkstidsd">
+            <End Role="tblstudent_details" EntitySet="tblstudent_details" />
+            <End Role="tblstudent_registrations" EntitySet="tblstudent_registrations" />
+          </AssociationSet>
+          <AssociationSet Name="fktopicid" Association="Self.fktopicid">
+            <End Role="tbltraining_topics" EntitySet="tbltraining_topics" />
+            <End Role="tbltopic_contents" EntitySet="tbltopic_contents" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="StudentTeacherDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblstudent_details">
+          <Key>
+            <PropertyRef Name="student_id" />
+          </Key>
+          <Property Name="student_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="student_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="mobile_number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="email_address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="birth_date" Type="DateTime" Precision="0" />
+          <Property Name="profile_photo" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="qualification" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="flage" Type="Int32" />
+          <NavigationProperty Name="tblstudent_registrations" Relationship="Self.fkstidsd" FromRole="tblstudent_details" ToRole="tblstudent_registrations" />
+        </EntityType>
+        <EntityType Name="tblstudent_payments">
+          <Key>
+            <PropertyRef Name="payment_id" />
+          </Key>
+          <Property Name="payment_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="registration_id" Type="Int32" />
+          <Property Name="payment_date" Type="DateTime" Precision="0" />
+          <Property Name="payment_amount" Type="Double" />
+          <Property Name="payment_mode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="payment_description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="flage" Type="Int32" />
+          <NavigationProperty Name="tblstudent_registrations" Relationship="Self.fkregid" FromRole="tblstudent_payments" ToRole="tblstudent_registrations" />
+        </EntityType>
+        <EntityType Name="tblstudent_registrations">
+          <Key>
+            <PropertyRef Name="registration_id" />
+          </Key>
+          <Property Name="registration_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="student_id" Type="Int32" />
+          <Property Name="course_id" Type="Int32" />
+          <Property Name="registration_date" Type="DateTime" Precision="0" />
+          <Property Name="discount" Type="Double" />
+          <Property Name="flage" Type="Int32" />
+          <NavigationProperty Name="tblstudent_details" Relationship="Self.fkstidsd" FromRole="tblstudent_registrations" ToRole="tblstudent_details" />
+          <NavigationProperty Name="tblstudent_payments" Relationship="Self.fkregid" FromRole="tblstudent_registrations" ToRole="tblstudent_payments" />
+          <NavigationProperty Name="tbltraining_courses" Relationship="Self.fkcoursesdid" FromRole="tblstudent_registrations" ToRole="tbltraining_courses" />
+        </EntityType>
+        <EntityType Name="tbltopic_contents">
+          <Key>
+            <PropertyRef Name="content_id" />
+          </Key>
+          <Property Name="content_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="topic_id" Type="Int32" />
+          <Property Name="content_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="flage" Type="Int32" />
+          <NavigationProperty Name="tbltraining_topics" Relationship="Self.fktopicid" FromRole="tbltopic_contents" ToRole="tbltraining_topics" />
+        </EntityType>
+        <EntityType Name="tbltraining_course_fees">
+          <Key>
+            <PropertyRef Name="fee_id" />
+          </Key>
+          <Property Name="fee_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="course_id" Type="Int32" />
+          <Property Name="fees_amount" Type="Double" Nullable="false" />
+          <Property Name="gst" Type="Double" />
+          <Property Name="fee_mode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="flage" Type="Int32" />
+          <NavigationProperty Name="tbltraining_courses" Relationship="Self.fkcourseid" FromRole="tbltraining_course_fees" ToRole="tbltraining_courses" />
+        </EntityType>
+        <EntityType Name="tbltraining_courses">
+          <Key>
+            <PropertyRef Name="course_id" />
+          </Key>
+          <Property Name="course_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="course_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="flage" Type="Int32" />
+          <NavigationProperty Name="tblstudent_registrations" Relationship="Self.fkcoursesdid" FromRole="tbltraining_courses" ToRole="tblstudent_registrations" />
+          <NavigationProperty Name="tbltraining_course_fees" Relationship="Self.fkcourseid" FromRole="tbltraining_courses" ToRole="tbltraining_course_fees" />
+        </EntityType>
+        <EntityType Name="tbltraining_topics">
+          <Key>
+            <PropertyRef Name="topic_id" />
+          </Key>
+          <Property Name="topic_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="topic_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="flage" Type="Int32" />
+          <NavigationProperty Name="tbltopic_contents" Relationship="Self.fktopicid" FromRole="tbltraining_topics" ToRole="tbltopic_contents" />
+        </EntityType>
+        <Association Name="fkstidsd">
+          <End Role="tblstudent_details" Type="Self.tblstudent_details" Multiplicity="0..1" />
+          <End Role="tblstudent_registrations" Type="Self.tblstudent_registrations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblstudent_details">
+              <PropertyRef Name="student_id" />
+            </Principal>
+            <Dependent Role="tblstudent_registrations">
+              <PropertyRef Name="student_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkregid">
+          <End Role="tblstudent_registrations" Type="Self.tblstudent_registrations" Multiplicity="0..1" />
+          <End Role="tblstudent_payments" Type="Self.tblstudent_payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblstudent_registrations">
+              <PropertyRef Name="registration_id" />
+            </Principal>
+            <Dependent Role="tblstudent_payments">
+              <PropertyRef Name="registration_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkcoursesdid">
+          <End Role="tbltraining_courses" Type="Self.tbltraining_courses" Multiplicity="0..1" />
+          <End Role="tblstudent_registrations" Type="Self.tblstudent_registrations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbltraining_courses">
+              <PropertyRef Name="course_id" />
+            </Principal>
+            <Dependent Role="tblstudent_registrations">
+              <PropertyRef Name="course_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fktopicid">
+          <End Role="tbltraining_topics" Type="Self.tbltraining_topics" Multiplicity="0..1" />
+          <End Role="tbltopic_contents" Type="Self.tbltopic_contents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbltraining_topics">
+              <PropertyRef Name="topic_id" />
+            </Principal>
+            <Dependent Role="tbltopic_contents">
+              <PropertyRef Name="topic_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkcourseid">
+          <End Role="tbltraining_courses" Type="Self.tbltraining_courses" Multiplicity="0..1" />
+          <End Role="tbltraining_course_fees" Type="Self.tbltraining_course_fees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbltraining_courses">
+              <PropertyRef Name="course_id" />
+            </Principal>
+            <Dependent Role="tbltraining_course_fees">
+              <PropertyRef Name="course_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="StudentTeacherDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblstudent_details" EntityType="Self.tblstudent_details" />
+          <EntitySet Name="tblstudent_payments" EntityType="Self.tblstudent_payments" />
+          <EntitySet Name="tblstudent_registrations" EntityType="Self.tblstudent_registrations" />
+          <EntitySet Name="tbltopic_contents" EntityType="Self.tbltopic_contents" />
+          <EntitySet Name="tbltraining_course_fees" EntityType="Self.tbltraining_course_fees" />
+          <EntitySet Name="tbltraining_courses" EntityType="Self.tbltraining_courses" />
+          <EntitySet Name="tbltraining_topics" EntityType="Self.tbltraining_topics" />
+          <AssociationSet Name="fkstidsd" Association="Self.fkstidsd">
+            <End Role="tblstudent_details" EntitySet="tblstudent_details" />
+            <End Role="tblstudent_registrations" EntitySet="tblstudent_registrations" />
+          </AssociationSet>
+          <AssociationSet Name="fkregid" Association="Self.fkregid">
+            <End Role="tblstudent_registrations" EntitySet="tblstudent_registrations" />
+            <End Role="tblstudent_payments" EntitySet="tblstudent_payments" />
+          </AssociationSet>
+          <AssociationSet Name="fkcoursesdid" Association="Self.fkcoursesdid">
+            <End Role="tbltraining_courses" EntitySet="tbltraining_courses" />
+            <End Role="tblstudent_registrations" EntitySet="tblstudent_registrations" />
+          </AssociationSet>
+          <AssociationSet Name="fktopicid" Association="Self.fktopicid">
+            <End Role="tbltraining_topics" EntitySet="tbltraining_topics" />
+            <End Role="tbltopic_contents" EntitySet="tbltopic_contents" />
+          </AssociationSet>
+          <AssociationSet Name="fkcourseid" Association="Self.fkcourseid">
+            <End Role="tbltraining_courses" EntitySet="tbltraining_courses" />
+            <End Role="tbltraining_course_fees" EntitySet="tbltraining_course_fees" />
+          </AssociationSet>
+          <FunctionImport Name="sp_fetch_tblstudent_details" ReturnType="Collection(StudentTeacherDBModel.sp_fetch_tblstudent_details_Result)">
+          <Parameter Name="student_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_fetch_tblstudent_payments" ReturnType="Collection(StudentTeacherDBModel.sp_fetch_tblstudent_payments_Result)">
+          <Parameter Name="payment_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_fetch_tblstudent_registrations" ReturnType="Collection(StudentTeacherDBModel.sp_fetch_tblstudent_registrations_Result)">
+          <Parameter Name="registration_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_fetch_tbltopic_contents" ReturnType="Collection(StudentTeacherDBModel.sp_fetch_tbltopic_contents_Result)">
+          <Parameter Name="content_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_fetch_tbltraining_course_fees" ReturnType="Collection(StudentTeacherDBModel.sp_fetch_tbltraining_course_fees_Result)">
+          <Parameter Name="fee_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_fetch_tbltraining_courses" ReturnType="Collection(StudentTeacherDBModel.sp_fetch_tbltraining_courses_Result)">
+          <Parameter Name="course_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_fetch_tbltraining_topics" ReturnType="Collection(StudentTeacherDBModel.sp_fetch_tbltraining_topics_Result)">
+          <Parameter Name="topic_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblstudent_details">
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="student_id" Mode="In" Type="Int32" />
+            <Parameter Name="student_name" Mode="In" Type="String" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="mobile_number" Mode="In" Type="String" />
+            <Parameter Name="email_address" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+            <Parameter Name="birth_date" Mode="In" Type="DateTime" />
+            <Parameter Name="profile_photo" Mode="In" Type="String" />
+            <Parameter Name="qualification" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblstudent_payments">
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="payment_id" Mode="In" Type="Int32" />
+            <Parameter Name="registration_id" Mode="In" Type="Int32" />
+            <Parameter Name="payment_date" Mode="In" Type="DateTime" />
+            <Parameter Name="payment_amount" Mode="In" Type="Double" />
+            <Parameter Name="payment_mode" Mode="In" Type="String" />
+            <Parameter Name="payment_description" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblstudent_registrations">
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="registration_id" Mode="In" Type="Int32" />
+            <Parameter Name="student_id" Mode="In" Type="Int32" />
+            <Parameter Name="course_id" Mode="In" Type="Int32" />
+            <Parameter Name="registration_date" Mode="In" Type="DateTime" />
+            <Parameter Name="discount" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tbltopic_contents">
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="content_id" Mode="In" Type="Int32" />
+            <Parameter Name="topic_id" Mode="In" Type="Int32" />
+            <Parameter Name="content_name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tbltraining_course_fees">
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="fee_id" Mode="In" Type="Int32" />
+            <Parameter Name="course_id" Mode="In" Type="Int32" />
+            <Parameter Name="fees_amount" Mode="In" Type="Double" />
+            <Parameter Name="gst" Mode="In" Type="Double" />
+            <Parameter Name="fee_mode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tbltraining_courses">
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="course_id" Mode="In" Type="Int32" />
+            <Parameter Name="course_name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tbltraining_topics">
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="topic_id" Mode="In" Type="Int32" />
+            <Parameter Name="topic_name" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="sp_fetch_tblstudent_details_Result">
+          <Property Type="Int32" Name="student_id" Nullable="false" />
+          <Property Type="String" Name="student_name" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="gender" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="mobile_number" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="email_address" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="password" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="birth_date" Nullable="true" />
+          <Property Type="String" Name="profile_photo" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="qualification" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="sp_fetch_tblstudent_payments_Result">
+          <Property Type="Int32" Name="payment_id" Nullable="false" />
+          <Property Type="Int32" Name="registration_id" Nullable="false" />
+          <Property Type="DateTime" Name="payment_date" Nullable="true" />
+          <Property Type="Double" Name="payment_amount" Nullable="true" />
+          <Property Type="String" Name="payment_mode" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="payment_description" Nullable="true" />
+          <Property Type="Int32" Name="student_id" Nullable="true" />
+          <Property Type="Int32" Name="course_id" Nullable="true" />
+          <Property Type="DateTime" Name="registration_date" Nullable="true" />
+          <Property Type="Double" Name="discount" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_fetch_tblstudent_registrations_Result">
+          <Property Type="Int32" Name="registration_id" Nullable="false" />
+          <Property Type="Int32" Name="student_id" Nullable="false" />
+          <Property Type="Int32" Name="course_id" Nullable="false" />
+          <Property Type="DateTime" Name="registration_date" Nullable="true" />
+          <Property Type="Double" Name="discount" Nullable="true" />
+          <Property Type="String" Name="student_name" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="gender" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="mobile_number" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="email_address" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="password" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="birth_date" Nullable="true" />
+          <Property Type="String" Name="profile_photo" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="qualification" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="course_name" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="sp_fetch_tbltopic_contents_Result">
+          <Property Type="Int32" Name="content_id" Nullable="false" />
+          <Property Type="Int32" Name="topic_id" Nullable="false" />
+          <Property Type="String" Name="content_name" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="topic_name" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="sp_fetch_tbltraining_course_fees_Result">
+          <Property Type="Int32" Name="fee_id" Nullable="false" />
+          <Property Type="Int32" Name="course_id" Nullable="false" />
+          <Property Type="Double" Name="fees_amount" Nullable="false" />
+          <Property Type="Double" Name="gst" Nullable="true" />
+          <Property Type="String" Name="course_name" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="sp_fetch_tbltraining_courses_Result">
+          <Property Type="Int32" Name="course_id" Nullable="false" />
+          <Property Type="String" Name="course_name" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="sp_fetch_tbltraining_topics_Result">
+          <Property Type="Int32" Name="topic_id" Nullable="false" />
+          <Property Type="String" Name="topic_name" Nullable="false" MaxLength="100" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="StudentTeacherDBModelStoreContainer" CdmEntityContainer="StudentTeacherDBEntities">
+          <EntitySetMapping Name="tblstudent_details">
+            <EntityTypeMapping TypeName="StudentTeacherDBModel.tblstudent_details">
+              <MappingFragment StoreEntitySet="tblstudent_details">
+                <ScalarProperty Name="student_id" ColumnName="student_id" />
+                <ScalarProperty Name="student_name" ColumnName="student_name" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="mobile_number" ColumnName="mobile_number" />
+                <ScalarProperty Name="email_address" ColumnName="email_address" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="birth_date" ColumnName="birth_date" />
+                <ScalarProperty Name="profile_photo" ColumnName="profile_photo" />
+                <ScalarProperty Name="qualification" ColumnName="qualification" />
+                <ScalarProperty Name="flage" ColumnName="flage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblstudent_payments">
+            <EntityTypeMapping TypeName="StudentTeacherDBModel.tblstudent_payments">
+              <MappingFragment StoreEntitySet="tblstudent_payments">
+                <ScalarProperty Name="payment_id" ColumnName="payment_id" />
+                <ScalarProperty Name="registration_id" ColumnName="registration_id" />
+                <ScalarProperty Name="payment_date" ColumnName="payment_date" />
+                <ScalarProperty Name="payment_amount" ColumnName="payment_amount" />
+                <ScalarProperty Name="payment_mode" ColumnName="payment_mode" />
+                <ScalarProperty Name="payment_description" ColumnName="payment_description" />
+                <ScalarProperty Name="flage" ColumnName="flage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblstudent_registrations">
+            <EntityTypeMapping TypeName="StudentTeacherDBModel.tblstudent_registrations">
+              <MappingFragment StoreEntitySet="tblstudent_registrations">
+                <ScalarProperty Name="registration_id" ColumnName="registration_id" />
+                <ScalarProperty Name="student_id" ColumnName="student_id" />
+                <ScalarProperty Name="course_id" ColumnName="course_id" />
+                <ScalarProperty Name="registration_date" ColumnName="registration_date" />
+                <ScalarProperty Name="discount" ColumnName="discount" />
+                <ScalarProperty Name="flage" ColumnName="flage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbltopic_contents">
+            <EntityTypeMapping TypeName="StudentTeacherDBModel.tbltopic_contents">
+              <MappingFragment StoreEntitySet="tbltopic_contents">
+                <ScalarProperty Name="content_id" ColumnName="content_id" />
+                <ScalarProperty Name="topic_id" ColumnName="topic_id" />
+                <ScalarProperty Name="content_name" ColumnName="content_name" />
+                <ScalarProperty Name="flage" ColumnName="flage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbltraining_course_fees">
+            <EntityTypeMapping TypeName="StudentTeacherDBModel.tbltraining_course_fees">
+              <MappingFragment StoreEntitySet="tbltraining_course_fees">
+                <ScalarProperty Name="fee_id" ColumnName="fee_id" />
+                <ScalarProperty Name="course_id" ColumnName="course_id" />
+                <ScalarProperty Name="fees_amount" ColumnName="fees_amount" />
+                <ScalarProperty Name="gst" ColumnName="gst" />
+                <ScalarProperty Name="fee_mode" ColumnName="fee_mode" />
+                <ScalarProperty Name="flage" ColumnName="flage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbltraining_courses">
+            <EntityTypeMapping TypeName="StudentTeacherDBModel.tbltraining_courses">
+              <MappingFragment StoreEntitySet="tbltraining_courses">
+                <ScalarProperty Name="course_id" ColumnName="course_id" />
+                <ScalarProperty Name="course_name" ColumnName="course_name" />
+                <ScalarProperty Name="flage" ColumnName="flage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbltraining_topics">
+            <EntityTypeMapping TypeName="StudentTeacherDBModel.tbltraining_topics">
+              <MappingFragment StoreEntitySet="tbltraining_topics">
+                <ScalarProperty Name="topic_id" ColumnName="topic_id" />
+                <ScalarProperty Name="topic_name" ColumnName="topic_name" />
+                <ScalarProperty Name="flage" ColumnName="flage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_fetch_tblstudent_details" FunctionName="StudentTeacherDBModel.Store.sp_fetch_tblstudent_details">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="StudentTeacherDBModel.sp_fetch_tblstudent_details_Result">
+                <ScalarProperty Name="student_id" ColumnName="student_id" />
+                <ScalarProperty Name="student_name" ColumnName="student_name" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="mobile_number" ColumnName="mobile_number" />
+                <ScalarProperty Name="email_address" ColumnName="email_address" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="birth_date" ColumnName="birth_date" />
+                <ScalarProperty Name="profile_photo" ColumnName="profile_photo" />
+                <ScalarProperty Name="qualification" ColumnName="qualification" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_fetch_tblstudent_payments" FunctionName="StudentTeacherDBModel.Store.sp_fetch_tblstudent_payments">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="StudentTeacherDBModel.sp_fetch_tblstudent_payments_Result">
+                <ScalarProperty Name="payment_id" ColumnName="payment_id" />
+                <ScalarProperty Name="registration_id" ColumnName="registration_id" />
+                <ScalarProperty Name="payment_date" ColumnName="payment_date" />
+                <ScalarProperty Name="payment_amount" ColumnName="payment_amount" />
+                <ScalarProperty Name="payment_mode" ColumnName="payment_mode" />
+                <ScalarProperty Name="payment_description" ColumnName="payment_description" />
+                <ScalarProperty Name="student_id" ColumnName="student_id" />
+                <ScalarProperty Name="course_id" ColumnName="course_id" />
+                <ScalarProperty Name="registration_date" ColumnName="registration_date" />
+                <ScalarProperty Name="discount" ColumnName="discount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_fetch_tblstudent_registrations" FunctionName="StudentTeacherDBModel.Store.sp_fetch_tblstudent_registrations">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="StudentTeacherDBModel.sp_fetch_tblstudent_registrations_Result">
+                <ScalarProperty Name="registration_id" ColumnName="registration_id" />
+                <ScalarProperty Name="student_id" ColumnName="student_id" />
+                <ScalarProperty Name="course_id" ColumnName="course_id" />
+                <ScalarProperty Name="registration_date" ColumnName="registration_date" />
+                <ScalarProperty Name="discount" ColumnName="discount" />
+                <ScalarProperty Name="student_name" ColumnName="student_name" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="mobile_number" ColumnName="mobile_number" />
+                <ScalarProperty Name="email_address" ColumnName="email_address" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="birth_date" ColumnName="birth_date" />
+                <ScalarProperty Name="profile_photo" ColumnName="profile_photo" />
+                <ScalarProperty Name="qualification" ColumnName="qualification" />
+                <ScalarProperty Name="course_name" ColumnName="course_name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_fetch_tbltopic_contents" FunctionName="StudentTeacherDBModel.Store.sp_fetch_tbltopic_contents">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="StudentTeacherDBModel.sp_fetch_tbltopic_contents_Result">
+                <ScalarProperty Name="content_id" ColumnName="content_id" />
+                <ScalarProperty Name="topic_id" ColumnName="topic_id" />
+                <ScalarProperty Name="content_name" ColumnName="content_name" />
+                <ScalarProperty Name="topic_name" ColumnName="topic_name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_fetch_tbltraining_course_fees" FunctionName="StudentTeacherDBModel.Store.sp_fetch_tbltraining_course_fees">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="StudentTeacherDBModel.sp_fetch_tbltraining_course_fees_Result">
+                <ScalarProperty Name="fee_id" ColumnName="fee_id" />
+                <ScalarProperty Name="course_id" ColumnName="course_id" />
+                <ScalarProperty Name="fees_amount" ColumnName="fees_amount" />
+                <ScalarProperty Name="gst" ColumnName="gst" />
+                <ScalarProperty Name="course_name" ColumnName="course_name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_fetch_tbltraining_courses" FunctionName="StudentTeacherDBModel.Store.sp_fetch_tbltraining_courses">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="StudentTeacherDBModel.sp_fetch_tbltraining_courses_Result">
+                <ScalarProperty Name="course_id" ColumnName="course_id" />
+                <ScalarProperty Name="course_name" ColumnName="course_name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_fetch_tbltraining_topics" FunctionName="StudentTeacherDBModel.Store.sp_fetch_tbltraining_topics">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="StudentTeacherDBModel.sp_fetch_tbltraining_topics_Result">
+                <ScalarProperty Name="topic_id" ColumnName="topic_id" />
+                <ScalarProperty Name="topic_name" ColumnName="topic_name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblstudent_details" FunctionName="StudentTeacherDBModel.Store.sp_tblstudent_details" />
+          <FunctionImportMapping FunctionImportName="sp_tblstudent_payments" FunctionName="StudentTeacherDBModel.Store.sp_tblstudent_payments" />
+          <FunctionImportMapping FunctionImportName="sp_tblstudent_registrations" FunctionName="StudentTeacherDBModel.Store.sp_tblstudent_registrations" />
+          <FunctionImportMapping FunctionImportName="sp_tbltopic_contents" FunctionName="StudentTeacherDBModel.Store.sp_tbltopic_contents" />
+          <FunctionImportMapping FunctionImportName="sp_tbltraining_course_fees" FunctionName="StudentTeacherDBModel.Store.sp_tbltraining_course_fees" />
+          <FunctionImportMapping FunctionImportName="sp_tbltraining_courses" FunctionName="StudentTeacherDBModel.Store.sp_tbltraining_courses" />
+          <FunctionImportMapping FunctionImportName="sp_tbltraining_topics" FunctionName="StudentTeacherDBModel.Store.sp_tbltraining_topics" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

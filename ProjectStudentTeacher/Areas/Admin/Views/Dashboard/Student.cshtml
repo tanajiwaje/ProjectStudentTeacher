@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewBag.Title = "Student";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script>
+    $(document).ready(function () {
+        GetAllStudentData();
+        $("#submitbtn").click(function () {
+            AddStudentData();
+        })
+    })
+
+    function GetAllStudentData() {
+        $.ajax({
+            url: 'https://localhost:44311/api/Admin/getallstudent',
+            method: 'GET',
+            contentType: 'application/json',
+            success: function (resp) {
+                console.log(resp)
+    
+                var i = 1;
+                resp.forEach(function (item) {
+                    $("#studentData").append("<tr><td>" + (i++) + "</td><td>" + item.student_name + "</td><td>" + item.gender + "</td><td>" + item.email_address + "</td><td>" + item.qualification + "</td><td><img src='" + item.profile_photo +"'>" + "</td><td><button onclick='Edit(" + item.topic_id + ", \"" + item.topic_name + "\")' class='btn btn-success'>Edit</button><button onclick='Delete(" + item.topic_id + ")' class='btn btn-danger'>Delete</button></td></tr>");
+                });
+            }
+
+        })
+    }
+
+    function AddStudentData() {
+        var name = $("#name").val();   
+        var name = $("#name").val();   
+        var mobilenumber = $("#mobilenumber").val();   
+        var email = $("#email").val();   
+        var dob = $("#dob").val();   
+        var qualification = $("#qualification").val();   
+        var photo = $("#photo").val();   
+    }
+  
+</script>
+
+
+<div class="row">
+    <h3>Add Student</h3>
+    <div class="col-5">
+        <table class="table ">
+            <tr>
+                <td>Name</td>
+                <td><input type="text" id="name" class="form-control"></td>
+            </tr>
+
+            <tr>
+                <td>Gender</td>
+                <td>
+                    Male <input type="radio" name="male" value="male">
+                    Female <input type="radio" name="male" value="female">
+                </td>
+            </tr>
+
+            
+            <tr>
+                <td>Mobile Number</td>
+                <td><input type="text" id="mobilenumber" class="form-control"></td>
+            </tr>
+
+
+            <tr>
+                <td>Email</td>
+                <td><input type="text" id="email" class="form-control"></td>
+            </tr>
+
+
+
+
+            <tr>
+                <td>DOB</td>
+                <td><input type="date" id="dob" class="form-control"></td>
+            </tr>
+
+            <tr>
+                <td>Qualification</td>
+                <td><input type="text" id="qualification" class="form-control"></td>
+            </tr>
+
+            <tr>
+                <td>Profile Photo</td>
+                <td><input type="file" id="photo"></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td><button class="btn btn-primary" id="submitbtn">Submit</button></td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div class="col-7">
+
+        <table class="table table-bordered" >
+            <thead>
+                <tr>
+                    <th>Sr no</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Email</th>
+                    <th>Qualification</th>
+                    <th>Picture</th>
+                    <th>Action</th>
+
+                </tr>
+            </thead>
+
+            <tbody id="studentData">
+                
+            </tbody>
+
+        </table>
+       
+    </div>
+
+</div>
+
