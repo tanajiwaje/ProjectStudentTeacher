@@ -9,7 +9,7 @@ namespace ProjectOperationServices.Services.Interface
 {
     public interface IStudentDetailServices
     {
-        void AddStudentDetails(sp_fetch_tblstudent_details_Result student);
+        int AddStudentDetails(sp_fetch_tblstudent_details_Result student);
         void UpdateStudentDetails(sp_fetch_tblstudent_details_Result student);
         void DeleteStudentDetails(int student_id);
         List<sp_fetch_tblstudent_details_Result> getAll();

@@ -20,6 +20,7 @@ namespace ProjectOperationServices
             try
             {
                 db.Database.ExecuteSqlCommand(sp_name, parameters);
+                
             }
             catch (Exception exception)
             {

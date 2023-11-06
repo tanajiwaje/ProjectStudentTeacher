@@ -25,18 +25,40 @@
                     $("#studentData").append("<tr><td>" + (i++) + "</td><td>" + item.student_name + "</td><td>" + item.gender + "</td><td>" + item.email_address + "</td><td>" + item.qualification + "</td><td><img src='" + item.profile_photo +"'>" + "</td><td><button onclick='Edit(" + item.topic_id + ", \"" + item.topic_name + "\")' class='btn btn-success'>Edit</button><button onclick='Delete(" + item.topic_id + ")' class='btn btn-danger'>Delete</button></td></tr>");
                 });
             }
-
         })
     }
 
     function AddStudentData() {
-        var name = $("#name").val();   
-        var name = $("#name").val();   
-        var mobilenumber = $("#mobilenumber").val();   
-        var email = $("#email").val();   
-        var dob = $("#dob").val();   
-        var qualification = $("#qualification").val();   
-        var photo = $("#photo").val();   
+        
+        var name = $("#name").val();
+        var gender = $("input[name='gender']:checked").val();
+        var mobilenumber = $("#mobilenumber").val();
+        var email = $("#email").val();
+        var dob = $("#dob").val();
+        var qualification = $("#qualification").val();
+
+        var formData = new FormData();
+        formData.append('student_name', name);
+        formData.append('birth_date', dob);
+        formData.append('email_address', email);
+        formData.append('gender', gender);
+        formData.append('mobile_number', mobilenumber);
+        formData.append('qualification', qualification);
+        formData.append('photo', $('#photo')[0].files[0]); 
+
+        $.ajax({
+            url: 'https://localhost:44311/api/Admin/addstudent',
+            method: 'post',
+            data: formData,
+            processData: false, 
+            contentType: false, 
+            success: function (resp)
+            {
+                console.log(resp);
+            }
+        });
+
+        
     }
   
 </script>
@@ -54,8 +76,8 @@
             <tr>
                 <td>Gender</td>
                 <td>
-                    Male <input type="radio" name="male" value="male">
-                    Female <input type="radio" name="male" value="female">
+                    Male <input type="radio" name="gender" value="male">
+                    Female <input type="radio" name="gender" value="female">
                 </td>
             </tr>
 

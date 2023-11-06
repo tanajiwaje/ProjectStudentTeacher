@@ -18,17 +18,19 @@ namespace ProjectOperationServices.Services.Implements
             _studentdetails = studentdetails;
         }
 
-        public void AddStudentDetails(sp_fetch_tblstudent_details_Result student)
+        public int AddStudentDetails(sp_fetch_tblstudent_details_Result student)
         {
             try
             {
                 string sp_name = "[sp_tblstudent_details]{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}";
                 object[] parameters = { "Insert", student.student_id, student.student_name, student.gender, student.mobile_number, student.email_address, student.password, student.birth_date,student.profile_photo, student.qualification };
                 _studentdetails.ExecuteCommnad(sp_name, parameters);
+                return 0;
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
+                return 1;
             }
         }
 
