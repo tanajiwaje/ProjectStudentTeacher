@@ -19,17 +19,17 @@
             contentType: 'application/json',
             success: function (resp) {
                 console.log(resp)
-    
+
                 var i = 1;
                 resp.forEach(function (item) {
-                    $("#studentData").append("<tr><td>" + (i++) + "</td><td>" + item.student_name + "</td><td>" + item.gender + "</td><td>" + item.email_address + "</td><td>" + item.qualification + "</td><td><img src='" + item.profile_photo +"'>" + "</td><td><button onclick='Edit(" + item.topic_id + ", \"" + item.topic_name + "\")' class='btn btn-success'>Edit</button><button onclick='Delete(" + item.topic_id + ")' class='btn btn-danger'>Delete</button></td></tr>");
+                    $("#studentData").append("<tr><td>" + (i++) + "</td><td>" + item.student_name + "</td><td>" + item.gender + "</td><td>" + item.email_address + "</td><td>" + item.qualification + "</td><td><img src='" + item.profile_photo + "'>" + "</td><td><button onclick='Edit(" + item.topic_id + ", \"" + item.topic_name + "\")' class='btn btn-success'>Edit</button><button onclick='Delete(" + item.topic_id + ")' class='btn btn-danger'>Delete</button></td></tr>");
                 });
             }
         })
     }
 
     function AddStudentData() {
-        
+
         var name = $("#name").val();
         var gender = $("input[name='gender']:checked").val();
         var mobilenumber = $("#mobilenumber").val();
@@ -37,6 +37,40 @@
         var dob = $("#dob").val();
         var qualification = $("#qualification").val();
 
+        $(".error").text("");
+         if (!name) {
+            $("#nameError").text("Name is required.");
+            isValid = false;
+        }
+        if (!gender) {
+            $("#genderError").text("Gender is required.");
+            isValid = false;
+        }
+        if (!mobilenumber) {
+            $("#mobilenumberError").text("Mobile Number is required.");
+            isValid = false;
+        }
+        if (!email) {
+            $("#emailError").text("Email is required.");
+            isValid = false;
+        }
+        if (!dob) {
+            $("#dobError").text("DOB is required.");
+            isValid = false;
+        }
+        if (!qualification) {
+            $("#qualificationError").text("Qualification is required.");
+            isValid = false;
+        }
+        if (!photo) {
+            $("#photoError").text("Profile Photo is required.");
+            isValid = false;
+        }
+
+        if (!isValid) {
+            return;
+        }
+  
         var formData = new FormData();
         formData.append('student_name', name);
         formData.append('birth_date', dob);
@@ -44,25 +78,23 @@
         formData.append('gender', gender);
         formData.append('mobile_number', mobilenumber);
         formData.append('qualification', qualification);
-        formData.append('photo', $('#photo')[0].files[0]); 
+        formData.append('photo', $('#photo')[0].files[0]);
 
         $.ajax({
             url: 'https://localhost:44311/api/Admin/addstudent',
             method: 'post',
             data: formData,
-            processData: false, 
-            contentType: false, 
-            success: function (resp)
-            {
+            processData: false,
+            contentType: false,
+            success: function (resp) {
                 console.log(resp);
             }
         });
 
-        
-    }
-  
-</script>
 
+    }
+
+</script>
 
 <div class="row">
     <h3>Add Student</h3>
@@ -71,6 +103,7 @@
             <tr>
                 <td>Name</td>
                 <td><input type="text" id="name" class="form-control"></td>
+                <td><span class="error" id="nameError"></span></td>
             </tr>
 
             <tr>
@@ -79,36 +112,37 @@
                     Male <input type="radio" name="gender" value="male">
                     Female <input type="radio" name="gender" value="female">
                 </td>
+                <td><span class="error" id="genderError"></span></td>
             </tr>
 
-            
             <tr>
                 <td>Mobile Number</td>
                 <td><input type="text" id="mobilenumber" class="form-control"></td>
+                <td><span class="error" id="mobilenumberError"></span></td>
             </tr>
-
 
             <tr>
                 <td>Email</td>
                 <td><input type="text" id="email" class="form-control"></td>
+                <td><span class="error" id="emailError"></span></td>
             </tr>
-
-
-
 
             <tr>
                 <td>DOB</td>
                 <td><input type="date" id="dob" class="form-control"></td>
+                <td><span class="error" id="dobError"></span></td>
             </tr>
 
             <tr>
                 <td>Qualification</td>
                 <td><input type="text" id="qualification" class="form-control"></td>
+                <td><span class="error" id="qualificationError"></span></td>
             </tr>
 
             <tr>
                 <td>Profile Photo</td>
                 <td><input type="file" id="photo"></td>
+                <td><span class="error" id="photoError"></span></td>
             </tr>
 
             <tr>
@@ -118,30 +152,33 @@
         </table>
     </div>
 
+   
 
-    <div class="col-7">
 
-        <table class="table table-bordered" >
-            <thead>
-                <tr>
-                    <th>Sr no</th>
-                    <th>Name</th>
-                    <th>Gender</th>
-                    <th>Email</th>
-                    <th>Qualification</th>
-                    <th>Picture</th>
-                    <th>Action</th>
 
-                </tr>
-            </thead>
 
-            <tbody id="studentData">
-                
-            </tbody>
+<div class="col-7">
 
-        </table>
-       
-    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Sr no</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Email</th>
+                <th>Qualification</th>
+                <th>Picture</th>
+                <th>Action</th>
+
+            </tr>
+        </thead>
+
+        <tbody id="studentData">
+        </tbody>
+
+    </table>
+
+</div>
 
 </div>
 
